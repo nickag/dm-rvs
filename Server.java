@@ -128,7 +128,7 @@ class SKafkaProducer {
 
 
 public class Server{
-    static FileWriter fw;
+    public static FileWriter fw;
     static String logHTTP=null;
     public static void main(String[] argv) throws Exception
     {
