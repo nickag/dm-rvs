@@ -59,30 +59,35 @@ class SKafkaConsumer extends  Thread {
         String msg=null;
         while(it.hasNext())
         {
-            Server.fw =new FileWriter("httpLog.html",true);
-            try{
-                //Server.fw =new FileWriter("httpLog.html",true);
-                msg=new String(it.next().message());
-                System.out.println(msg);
-                String[] msgList;
-                msgList=msg.split(";");
-                String log="<tr>";
-                URL url=new URL(msgList[0]);
-                msgList[0]=url.getHost();
-                for(int i=0;i<msgList.length;i++)
-                {
-                    log+="<td>"+msgList[i]+"</td>";
+            try {
+
+
+                Server.fw = new FileWriter("httpLog.html", true);
+                try {
+                    //Server.fw =new FileWriter("httpLog.html",true);
+                    msg = new String(it.next().message());
+                    System.out.println(msg);
+                    String[] msgList;
+                    msgList = msg.split(";");
+                    String log = "<tr>";
+                    URL url = new URL(msgList[0]);
+                    msgList[0] = url.getHost();
+                    for (int i = 0; i < msgList.length; i++) {
+                        log += "<td>" + msgList[i] + "</td>";
+                    }
+                    log += "</tr>";
+                    Server.fw.write(log);
+                    //Server.fw.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    Server.fw.close();
                 }
-                log+="</tr>";
-                Server.fw.write(log);
-                //Server.fw.close();
-            }catch(Exception e){
+            }
+            catch(Exception e)
+            {
                 e.printStackTrace();
             }
-            finally {
-                Server.fw.close();
-            }
-
 
         }
 
