@@ -59,7 +59,7 @@ class SKafkaConsumer extends  Thread {
         String msg=null;
         while(it.hasNext())
         {
-
+            Server.fw =new FileWriter("httpLog.html",true);
             try{
                 //Server.fw =new FileWriter("httpLog.html",true);
                 msg=new String(it.next().message());
@@ -78,6 +78,9 @@ class SKafkaConsumer extends  Thread {
                 //Server.fw.close();
             }catch(Exception e){
                 e.printStackTrace();
+            }
+            finally {
+                Server.fw.close();
             }
 
 
@@ -140,7 +143,7 @@ public class Server{
         fw =new FileWriter("httpLog.html");
         logHTTP="<html><head><title>HTTP Check</title><meta charset='utf-8'>  <meta name='viewport' content='width=device-width, initial-scale=1'>  <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>  <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>  <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script></head><body><div class='page-header'><center><h1>HTTP Check</h1></center></div><table class='table table-striped'><tr><th>URL</th><th>Status Code</th><th>DNS Lookup Time(sec)</th><th>TTFB(sec)</th><<th>Total_Time(sec)</th>th>Response Size(bytes)</th></tr>";
         fw.write(logHTTP);
-        //fw.close();
+        fw.close();
 
         SKafkaConsumer consumer=new SKafkaConsumer();
         consumer.start();
