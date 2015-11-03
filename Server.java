@@ -194,7 +194,7 @@ public class Server{
 
             //----------waits for the next iteration-------------//
             try {
-                Thread.sleep(300000);                 //1000 milliseconds is one second.
+                Thread.sleep(120000);                 //1000 milliseconds is one second.
             } catch(InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }

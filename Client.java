@@ -32,7 +32,15 @@ import java.util.*;
 import kafka.javaapi.message.ByteBufferMessageSet;
 import kafka.message.MessageAndOffset;
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
+class Test {
 
+    public native double[] sayHello(String url);
+
+    /*static {
+        System.loadLibrary("clib");
+    }*/
+}
 
 class CKafkaConsumer extends  Thread {
     final static String clientId = "SimpleConsumerDemoClient";
@@ -126,11 +134,25 @@ class response implements Runnable{
 
     public void run()
     {
-        String msg=Url+";";
+        String msg=Url;
         int responseCode=500;
         float dnsLookupTime=0,elapsedTime=0,ttfb=0;
         int responseSize=0;
-        try{
+
+        System.loadLibrary("Test");
+        double[] results=new Test().sayHello(Url);
+	msg+=";"+Integer.toString((int)results[0]);
+	DecimalFormat f=new DecimalFormat("00.00");
+        for(int i=1;i<results.length;i++)
+        {
+            String val=Double.toString(results[i]);
+            System.out.println(val);
+            msg+=";"+val;
+
+        }
+        System.out.println(msg);
+        CKafkaProducer.sendMsg(msg);
+        /*try{
 
             URL obj=new URL(Url);
             String host=obj.getHost();
@@ -192,7 +214,8 @@ class response implements Runnable{
             msg+=Integer.toString(responseCode)+";"+ Float.toString(dnsLookupTime)+";"+Float.toString(ttfb)+";"+Float.toString(elapsedTime)+";"+Integer.toString(responseSize);
             System.out.println(msg);
             CKafkaProducer.sendMsg(msg);
-        }
+        }*/
+
     }
 
 }
