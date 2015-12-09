@@ -20,6 +20,7 @@ JNIEXPORT jdoubleArray JNICALL Java_Test_sayHello(JNIEnv *env, jobject obj, jstr
     curl_global_init( CURL_GLOBAL_ALL );
     CURL * myHandle;
     jdouble val,dns,conn,preTime,ttfb,ttime,redirectTime,redirectCount,size,downSpeed,resCode;
+    val=dns=conn=preTime=ttfb=ttime=redirectTime=redirectCount=size=downSpeed=resCode=0;
     int no=0;
     jdoubleArray result=(*env)->NewDoubleArray(env, 10);
     CURLcode res; // We’ll store the result of CURL’s webpage retrieval, for simple error checking.
@@ -27,6 +28,7 @@ JNIEXPORT jdoubleArray JNICALL Java_Test_sayHello(JNIEnv *env, jobject obj, jstr
     // Notice the lack of major error checking, for brevity
     curl_easy_setopt(myHandle, CURLOPT_URL, url);
     curl_easy_setopt(myHandle, CURLOPT_USERAGENT,"Mozilla/4.0");
+    curl_easy_setopt(myHandle, CURLOPT_TIMEOUT_MS, 2000L);
     curl_easy_setopt(myHandle, CURLOPT_WRITEFUNCTION, WriteCallback);
     res = curl_easy_perform( myHandle );
     if(CURLE_OK == res) {
@@ -129,18 +131,3 @@ JNIEXPORT jdoubleArray JNICALL Java_Test_sayHello(JNIEnv *env, jobject obj, jstr
     (*env)->SetDoubleArrayRegion(env, result, 0 , 10, _result);
     return result;
 }
-/*
-int main()
-{
-    curl_global_init( CURL_GLOBAL_ALL );
-    CURL * myHandle;
-    CURLcode result; // We’ll store the result of CURL’s webpage retrieval, for simple error checking.
-    myHandle = curl_easy_init ( ) ;
-    // Notice the lack of major error checking, for brevity
-    curl_easy_setopt(myHandle, CURLOPT_URL, "http://www.google.co.in");
-    result = curl_easy_perform( myHandle );
-    curl_easy_cleanup( myHandle ); 
-    printf("LibCurl rules!\n");
-    return 0;
- }
-*/
